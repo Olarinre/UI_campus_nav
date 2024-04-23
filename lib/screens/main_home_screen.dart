@@ -1,5 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ui_campus_nav/screens/homepage.dart';
+import 'package:ui_campus_nav/screens/profile.dart';
+import 'package:ui_campus_nav/screens/savepage.dart';
+import 'package:ui_campus_nav/screens/settings.dart';
 
 //this is the homepage
 
@@ -13,7 +17,14 @@ class MainHomeScreen extends StatefulWidget {
 class _MainHomeScreenState extends State<MainHomeScreen> {
   final user = FirebaseAuth.instance.currentUser;
 
-  int currentndex = 0;
+  
+  int currentIndex = 0;
+  List<Widget> screens = [
+    const HomePage(),
+    const SavePage(),
+    const Settings(),
+    const UserProfile(),
+  ];
 
   void signUserOut() {
     FirebaseAuth.instance.signOut();
@@ -23,139 +34,67 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          actions: [
-            IconButton(
-              onPressed: signUserOut,
-              icon: const Icon(Icons.logout),
-            )
-          ],
-        ),
-        body: const SafeArea(
-          child: Padding(
-            padding: EdgeInsets.all(25),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Column(
-                      children: [
-                        Text(
-                          "Welcome Username!",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text("Where are you going today?"),
-                      ],
-                    ),
-                  ],
-                  //place their profile pic here
-                ),
-
-                SizedBox(
-                  height: 20,
-                ),
-                //searchbar
-                TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Search',
-                    prefixIcon: Icon(Icons.search),
-                    suffixIcon: Icon(Icons.mic),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color.fromRGBO(190, 190, 190, 1),
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.white10,
-                      ),
-                    ),
-                    fillColor: Colors.white,
-                    filled: true,
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-
-                //explore the university text
-                Text("Explore the University"),
-                SizedBox(
-                  height: 15,
-                ),
-
-                //row1 widget containing faculty and hostel clickable images
-                Row(
-                  children: [
-                    ClickableSizedBox(
-                      backgroundImage: "lib/images/facultyimage.jpeg",
-                      text: "Faculty",
-                    ),
-                    ClickableSizedBox(
-                      backgroundImage: "lib/images/hostelimage1.jpeg",
-                      text: "Hostels",
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10),
-                //row2 widget containing libraries and cafeterias clickable images
-                Row(
-                  children: [
-                    ClickableSizedBox(
-                      backgroundImage: "lib/images/libraryimage.jpeg",
-                      text: "Library",
-                    ),
-                    ClickableSizedBox(
-                      backgroundImage: "lib/images/cafeteriaimage.jpeg",
-                      text: "Cafeterias",
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20),
-
-                // row widget containing recently visted texxt and see all
-
-                //bottom navigation bar to naviage to other section of  the app.
-              ],
-            ),
-          ),
-        ),
+        // appBar: AppBar(
+        //   actions: [
+        //     IconButton(
+        //       onPressed: signUserOut,
+        //       icon: const Icon(Icons.logout),
+        //     )
+        //   ],
+        // ),
+        
+         body: screens[currentIndex],
         bottomNavigationBar: BottomNavigationBar(
+          currentIndex: currentIndex,
+          fixedColor: Colors.blue.shade900,
+          type: BottomNavigationBarType.fixed,
+          onTap: (value) => setState(() => currentIndex = value),
+          selectedIconTheme: IconThemeData(color: Colors.blue.shade900),
+          selectedLabelStyle: TextStyle(color: Colors.blue.shade900),
+          unselectedLabelStyle: TextStyle(color: Colors.blue.shade900),
+          unselectedItemColor: Colors.grey,
           items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'Home'),
             BottomNavigationBarItem(
-              label: 'Home',
-              icon: Icon(
-                Icons.home,
-                color: Color.fromARGB(255, 2, 21, 124),
-              ),
-            ),
+                icon: Icon(Icons.bookmark_border),
+                label: 'Saved'),
             BottomNavigationBarItem(
-              label: 'Saved',
-              icon: Icon(
-                Icons.bookmark,
-                color: Color.fromARGB(255, 2, 21, 124),
-              ),
-            ),
-            BottomNavigationBarItem(
-              label: 'Settings',
-              icon: Icon(
-                Icons.settings,
-                color: Color.fromARGB(255, 2, 21, 124),
-              ),
-            ),
-            BottomNavigationBarItem(
-              label: 'Profile',
-              icon: Icon(
-                Icons.man,
-                color: Color.fromARGB(255, 2, 21, 124),
-              ),
-            ),
+                icon: Icon(Icons.settings_outlined), label: 'Settings'),
+            BottomNavigationBarItem(icon: Icon(Icons.person_2_outlined), label: 'Profile'),
           ],
         ),
+        // bottomNavigationBar: BottomNavigationBar(
+        //   items: const [
+        //     BottomNavigationBarItem(
+        //       label: 'Home',
+        //       icon: Icon(
+        //         Icons.home,
+        //         color: Color.fromARGB(255, 2, 21, 124),
+        //       ),
+        //     ),
+        //     BottomNavigationBarItem(
+        //       label: 'Saved',
+        //       icon: Icon(
+        //         Icons.bookmark,
+        //         color: Color.fromARGB(255, 2, 21, 124),
+        //       ),
+        //     ),
+        //     BottomNavigationBarItem(
+        //       label: 'Settings',
+        //       icon: Icon(
+        //         Icons.settings,
+        //         color: Color.fromARGB(255, 2, 21, 124),
+        //       ),
+        //     ),
+        //     BottomNavigationBarItem(
+        //       label: 'Profile',
+        //       icon: Icon(
+        //         Icons.man,
+        //         color: Color.fromARGB(255, 2, 21, 124),
+        //       ),
+        //     ),
+        //   ],
+        // ),
       ),
     );
   }
@@ -210,3 +149,99 @@ class ClickableSizedBox extends StatelessWidget {
     );
   }
 }
+
+
+
+// body: const SafeArea(
+//           child: Padding(
+//             padding: EdgeInsets.all(25),
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 Row(
+//                   children: [
+//                     Column(
+//                       children: [
+//                         Text(
+//                           "Welcome Username!",
+//                           style: TextStyle(
+//                             fontSize: 18,
+//                             fontWeight: FontWeight.bold,
+//                           ),
+//                         ),
+//                         Text("Where are you going today?"),
+//                       ],
+//                     ),
+//                   ],
+//                   //place their profile pic here
+//                 ),
+
+//                 SizedBox(
+//                   height: 20,
+//                 ),
+//                 //searchbar
+//                 TextField(
+//                   decoration: InputDecoration(
+//                     hintText: 'Search',
+//                     prefixIcon: Icon(Icons.search),
+//                     suffixIcon: Icon(Icons.mic),
+//                     enabledBorder: OutlineInputBorder(
+//                       borderSide: BorderSide(
+//                         color: Color.fromRGBO(190, 190, 190, 1),
+//                       ),
+//                     ),
+//                     focusedBorder: OutlineInputBorder(
+//                       borderSide: BorderSide(
+//                         color: Colors.white10,
+//                       ),
+//                     ),
+//                     fillColor: Colors.white,
+//                     filled: true,
+//                   ),
+//                 ),
+//                 SizedBox(
+//                   height: 20,
+//                 ),
+
+//                 //explore the university text
+//                 Text("Explore the University"),
+//                 SizedBox(
+//                   height: 15,
+//                 ),
+
+//                 //row1 widget containing faculty and hostel clickable images
+//                 Row(
+//                   children: [
+//                     ClickableSizedBox(
+//                       backgroundImage: "lib/images/facultyimage.jpeg",
+//                       text: "Faculty",
+//                     ),
+//                     ClickableSizedBox(
+//                       backgroundImage: "lib/images/hostelimage1.jpeg",
+//                       text: "Hostels",
+//                     ),
+//                   ],
+//                 ),
+//                 SizedBox(height: 10),
+//                 //row2 widget containing libraries and cafeterias clickable images
+//                 Row(
+//                   children: [
+//                     ClickableSizedBox(
+//                       backgroundImage: "lib/images/libraryimage.jpeg",
+//                       text: "Library",
+//                     ),
+//                     ClickableSizedBox(
+//                       backgroundImage: "lib/images/cafeteriaimage.jpeg",
+//                       text: "Cafeterias",
+//                     ),
+//                   ],
+//                 ),
+//                 SizedBox(height: 20),
+
+//                 // row widget containing recently visted texxt and see all
+
+//                 //bottom navigation bar to naviage to other section of  the app.
+//               ],
+//             ),
+//           ),
+//         ),
