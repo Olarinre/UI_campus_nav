@@ -24,6 +24,7 @@ class _MapScreenState extends State<MapScreen> {
   LatLng? currentLocation;
   LatLng? destinationLocation;
   String estimatedTime = "";
+  String estimatedDistance = ""; // Add this state variable
   Set<Polyline> polylines = {};
   Set<Marker> markers = {}; // Markers set
   String apiKey = 'AIzaSyCiIQPMEb3otDsYQ5U8Vej6_8t3gSEoaYQ'; // Your Google Maps API Key
@@ -126,8 +127,10 @@ class _MapScreenState extends State<MapScreen> {
 
   void _updateEstimatedTime(Map<String, dynamic> data) {
     var duration = data['routes'][0]['legs'][0]['duration'];
+    var distance = data['routes'][0]['legs'][0]['distance'];  // Fetch the distance from the data
     setState(() {
       estimatedTime = duration['text'];
+       estimatedDistance = distance['text']; 
     });
   }
 
@@ -228,6 +231,11 @@ class _MapScreenState extends State<MapScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text('Estimated Travel Time: $estimatedTime'),
+            ),
+             if (estimatedDistance.isNotEmpty) // Display the estimated distance
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('Estimated Distance: $estimatedDistance'),
             ),
         ],
       ),
